@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from players import is_empty
+from header import header
 
 print('Please enter the names of the players in the game, one at a time.')
 print('Please press <Enter> on a blank line when finished.')
@@ -21,7 +22,8 @@ while True:
 while True:
 
     # Prints current wins for each player.
-    print()    
+    print()
+    print(header('Current Standings'))
     for name, wins in players.iteritems():
         print('{0}: {1}'.format(name, wins))
     print()

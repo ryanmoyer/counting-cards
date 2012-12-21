@@ -11,6 +11,3 @@ class TestPlayers(unittest.TestCase):
 
     def test_name(self):
         self.assertFalse(is_empty('Ryan'))
-
-if __name__ == '__main__':
-    unittest.main()
