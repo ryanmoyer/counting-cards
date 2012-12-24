@@ -1,0 +1,1 @@
+Counts the number of times a person wins based on the number of times their name has been entered.
