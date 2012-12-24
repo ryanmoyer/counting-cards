@@ -29,20 +29,21 @@ is pressed twice::
     Enter an item: chicken
 """
 
-from __future__ import print_function
+
 # Uses GNU readline on UNIX-like operating systems, pyreadline on Windows.
 import readline
 
 # Set up global readline state.
-readline.parse_and_bind('tab: complete')    
-    
+readline.parse_and_bind('tab: complete')
+
+
 class ConsoleCompleter(object):
     """Track completions for a readline completer function."""
     def __init__(self, completions=[]):
         self.completions = completions
         # Tell readline to use the tab key for completions.
         readline.set_completer(self._readline_completer)
-            
+
     def _readline_completer(self, text, state):
         # This is a clever way to return the correction completion for
         # the "state". Basically, the "state" is the amount of times
@@ -54,6 +55,7 @@ class ConsoleCompleter(object):
                     return completion
                 else:
                     state -= 1
+
 
 def read_line(prompt):
     """Easily accept input. When <Ctrl-D> (UNIX-like) or <Ctrl-Z> +

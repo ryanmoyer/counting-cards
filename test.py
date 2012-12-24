@@ -2,7 +2,6 @@
 
 # Test runner
 
-import sys
 import unittest
 
 
@@ -11,7 +10,8 @@ def main():
 
         python -m unittest discover tests
 
-    No need to return anything since :func:`unittest.main()` directly calls :func:`sys.exit()`.
+    No need to return anything since :func:`unittest.main()` directly calls
+    :func:`sys.exit()`.
     """
     unittest.main(argv=['', 'discover', 'tests'])
 

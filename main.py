@@ -17,7 +17,7 @@ while True:
     name = read_line('Player {0}: '.format(len(players) + 1))
     if is_empty(name):
         break
-    players[name] = 0    
+    players[name] = 0
 
 compl = ConsoleCompleter(players.keys())
 
@@ -36,4 +36,3 @@ while True:
     if is_empty(winner):
         break
     players[winner] += 1
-    

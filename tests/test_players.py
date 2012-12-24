@@ -2,6 +2,7 @@ import unittest
 
 from players import is_empty
 
+
 class TestPlayers(unittest.TestCase):
     def test_empty_string(self):
         self.assertTrue(is_empty(''))
