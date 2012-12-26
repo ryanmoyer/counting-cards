@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from counting_cards.players import is_empty
+from counting_cards.utils import is_empty
 from counting_cards.header import header
 from counting_cards.console_io import ConsoleCompleter, read_line
 
