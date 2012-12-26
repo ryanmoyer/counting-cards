@@ -1,6 +1,8 @@
 import unittest
 
-from db import PlayersDB, DuplicatePlayerError, NonexistentPlayerError
+from counting_cards.db import (PlayersDB,
+                               DuplicatePlayerError,
+                               NonexistentPlayerError)
 
 
 class TestPlayersDB(unittest.TestCase):
