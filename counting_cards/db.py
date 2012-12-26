@@ -27,9 +27,10 @@ class PlayersDB(object):
         self._data[name] = 0
 
     def add_wins(self, name, wins=1):
-        if name not in self._data:
+        try:
+            self._data[name] += wins
+        except KeyError:
             raise NonexistentPlayerError(name)
-        self._data[name] = wins
 
     def get_wins(self, name):
         return self._data[name]

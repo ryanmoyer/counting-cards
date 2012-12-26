@@ -9,7 +9,7 @@ class TestPlayersDB(unittest.TestCase):
     def setUp(self):
         self.db = PlayersDB()
 
-    def test_add_normal(self):
+    def test_add_retrieve(self):
         name = 'Charlie'
         self.db.add_player(name)
         self.assertEqual(self.db.get_wins(name), 0)
@@ -23,10 +23,10 @@ class TestPlayersDB(unittest.TestCase):
 
     def test_add_wins(self):
         name = 'Mott'
-        wins = 10
         self.db.add_player(name)
-        self.db.add_wins(name, wins)
-        self.assertEqual(self.db.get_wins(name), wins)
+        self.db.add_wins(name, 5)
+        self.db.add_wins(name, 3)
+        self.assertEqual(self.db.get_wins(name), 8)
 
     def test_add_wins_nonexistent(self):
         name = 'Fake'
@@ -40,6 +40,17 @@ class TestPlayersDB(unittest.TestCase):
         self.db.add_player(name)
         self.db.add_wins(name)
         self.assertEqual(self.db.get_wins(name), 1)
+
+    def test_multiple_players(self):
+        self.db.add_player('Rick')
+        self.db.add_player('Mott')
+        self.db.add_wins('Rick')
+        self.db.add_wins('Mott')
+        self.db.add_wins('Rick')
+        self.db.add_wins('Rick', 2)
+        self.db.add_wins('Mott')
+        self.assertEqual(self.db.get_wins('Rick'), 4)
+        self.assertEqual(self.db.get_wins('Mott'), 2)
 
     def test_iter_players_wins(self):
         players_scores = [
