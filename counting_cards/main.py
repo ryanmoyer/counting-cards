@@ -1,8 +1,8 @@
 from __future__ import print_function
 
-from players import is_empty
-from header import header
-from console_io import ConsoleCompleter, read_line
+from counting_cards.players import is_empty
+from counting_cards.header import header
+from counting_cards.console_io import ConsoleCompleter, read_line
 
 print('Please enter the names of the players in the game, one at a time.')
 print('Please press <Enter> on a blank line when finished.')

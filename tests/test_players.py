@@ -1,6 +1,6 @@
 import unittest
 
-from players import is_empty
+from counting_cards.players import is_empty
 
 
 class TestPlayers(unittest.TestCase):

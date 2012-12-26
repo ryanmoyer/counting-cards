@@ -2,7 +2,7 @@
 
 import unittest
 
-from header import header
+from counting_cards.header import header
 
 
 class TestHeader(unittest.TestCase):
