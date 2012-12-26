@@ -66,7 +66,7 @@ class TestPlayersDB(unittest.TestCase):
 
     def test_len_no_players(self):
         self.assertEqual(len(self.db), 0)
-        
+
     def test_len_with_players(self):
         for name in ['Bruce', 'Bob', 'Sue']:
             self.db.add_player(name)
