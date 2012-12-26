@@ -64,6 +64,12 @@ class TestPlayersDB(unittest.TestCase):
         # added.
         self.assertEqual(list(self.db.iter_players_wins()), players_scores)
 
+    def test_get_players(self):
+        names = ['Bruce', 'Bob', 'Sue']
+        for name in names:
+            self.db.add_player(name)
+        self.assertEqual(self.db.get_players(), names)
+
     def test_len_no_players(self):
         self.assertEqual(len(self.db), 0)
 

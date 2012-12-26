@@ -38,5 +38,8 @@ class PlayersDB(object):
     def get_wins(self, name):
         return self._data[name]
 
+    def get_players(self):
+        return self._data.keys()
+
     def iter_players_wins(self):
         return self._data.iteritems()
