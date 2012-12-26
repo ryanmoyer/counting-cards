@@ -21,6 +21,9 @@ class PlayersDB(object):
     def __init__(self):
         self._data = OrderedDict()
 
+    def __len__(self):
+        return len(self._data)
+
     def add_player(self, name):
         if name in self._data:
             raise DuplicatePlayerError(name)

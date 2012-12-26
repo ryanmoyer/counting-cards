@@ -63,3 +63,11 @@ class TestPlayersDB(unittest.TestCase):
         # The players should be returned in the order which they were
         # added.
         self.assertEqual(list(self.db.iter_players_wins()), players_scores)
+
+    def test_len_no_players(self):
+        self.assertEqual(len(self.db), 0)
+        
+    def test_len_with_players(self):
+        for name in ['Bruce', 'Bob', 'Sue']:
+            self.db.add_player(name)
+        self.assertEqual(len(self.db), 3)
