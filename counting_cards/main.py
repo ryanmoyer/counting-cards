@@ -3,23 +3,21 @@ from __future__ import print_function
 from counting_cards.utils import is_empty
 from counting_cards.header import header
 from counting_cards.console_io import ConsoleCompleter, read_line
+from counting_cards.db import PlayersDB
 
 print('Please enter the names of the players in the game, one at a time.')
 print('Please press <Enter> on a blank line when finished.')
 
-# The players variable is a mapping from the player's name to the amount of
-# games they have won.
-# Same as players = dict() which creates a dictionary called 'players.'
-players = {}
+players = PlayersDB()
 
 # Records names of people playing.
 while True:
     name = read_line('Player {0}: '.format(len(players) + 1))
     if is_empty(name):
         break
-    players[name] = 0
+    players.add_player(name)
 
-compl = ConsoleCompleter(players.keys())
+compl = ConsoleCompleter(players.get_players())
 
 # Prints initial wins then prompts for the winner of each game.
 while True:
@@ -27,7 +25,7 @@ while True:
     # Prints current wins for each player.
     print()
     print(header('Current Standings'))
-    for name, wins in players.iteritems():
+    for name, wins in players.iter_players_wins():
         print('{0}: {1}'.format(name, wins))
     print()
 
@@ -35,4 +33,4 @@ while True:
     winner = read_line('Please enter the name of the player that won: ')
     if is_empty(winner):
         break
-    players[winner] += 1
+    players.add_wins(winner)
