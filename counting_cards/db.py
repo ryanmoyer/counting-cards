@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import exists
 
-engine = create_engine('sqlite:///:memory:')
+engine = create_engine('sqlite:///players.sqlite')
 Session = sessionmaker()
 Base = declarative_base()
 
@@ -60,12 +60,12 @@ class PlayersDB(object):
             raise DuplicatePlayerError(name)
         new_player = Player(name=name, wins=0)
         self.session.add(new_player)
-        self.session.flush()
+        self.session.commit()
 
     def add_wins(self, name, wins=1):
         winning_player = self._get_player_by_name(name)
         winning_player.wins += wins
-        self.session.flush()
+        self.session.commit()
 
     def get_wins(self, name):
         player = self._get_player_by_name(name)
