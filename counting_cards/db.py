@@ -1,11 +1,18 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import exists
+from appdirs import user_data_dir
 
-# The SQLite database file will be created in the current directory.
-SQLITE_DB_FILE = 'players.sqlite'
+APP_NAME = 'Counting Cards'
+APP_AUTHOR = 'Ryan Moyer'
+SQLITE_DB_DIR = user_data_dir(APP_NAME, APP_AUTHOR)
+if not os.path.exists(SQLITE_DB_DIR):
+    os.makedirs(SQLITE_DB_DIR)  # No error handling for this (yet).
+SQLITE_DB_PATH = os.path.join(SQLITE_DB_DIR, 'players.sqlite')
 
 Session = sessionmaker()
 Base = declarative_base()
@@ -40,7 +47,7 @@ class NonexistentPlayerError(Exception):
 
 class PlayersDB(object):
     def __init__(self,
-                 engine=create_engine('sqlite:///{0}'.format(SQLITE_DB_FILE)),
+                 engine=create_engine('sqlite:///{0}'.format(SQLITE_DB_PATH)),
                  session=None):
         # If the user passes an engine and a session use them. This
         # "feature" will only be used for unit testing. The defaults
