@@ -1,4 +1,25 @@
-from collections import OrderedDict
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import exists
+
+engine = create_engine('sqlite:///:memory:')
+Session = sessionmaker()
+Base = declarative_base()
+
+
+class Player(Base):
+    __tablename__ = 'players'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    wins = Column(Integer)
+
+    def __repr__(self):
+        return 'Player(name={0}, wins={1})'.format(self.name, self.wins)
+
+Base.metadata.create_all(engine)
 
 
 class DuplicatePlayerError(Exception):
@@ -18,28 +39,39 @@ class NonexistentPlayerError(Exception):
 
 
 class PlayersDB(object):
-    def __init__(self):
-        self._data = OrderedDict()
+    def __init__(self, session=Session(bind=engine)):
+        # If the user passes is a session, use that. Otherwise default
+        # to a session bound to the engine. This is mainly for unit
+        # testing.
+        self.session = session
 
     def __len__(self):
-        return len(self._data)
+        return self.session.query(Player).count()
 
     def add_player(self, name):
-        if name in self._data:
+        if self.session.query(exists().where(Player.name == name)).scalar():
             raise DuplicatePlayerError(name)
-        self._data[name] = 0
+        new_player = Player(name=name, wins=0)
+        self.session.add(new_player)
+        self.session.flush()
 
     def add_wins(self, name, wins=1):
-        try:
-            self._data[name] += wins
-        except KeyError:
+        winning_player = self.session.query(Player).filter(
+            Player.name == name).first()
+        if winning_player is None:
+            # No rows were returned.
             raise NonexistentPlayerError(name)
+        winning_player.wins += wins
+        self.session.flush()
 
     def get_wins(self, name):
-        return self._data[name]
+        return self.session.query(Player.wins).filter(
+            Player.name == name).first().wins
 
     def get_players(self):
-        return self._data.keys()
+        return [row.name for row in self.session.query(Player.name).all()]
 
     def iter_players_wins(self):
-        return self._data.iteritems()
+        return iter([
+            (row.name, row.wins) for row in self.session.query(
+                Player.name, Player.wins).all()])

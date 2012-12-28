@@ -2,12 +2,31 @@ import unittest
 
 from counting_cards.db import (PlayersDB,
                                DuplicatePlayerError,
-                               NonexistentPlayerError)
+                               NonexistentPlayerError,
+                               engine,
+                               Session)
 
 
+# See <http://docs.sqlalchemy.org/en/rel_0_8/orm/
+# session.html#session-external-transaction>
 class TestPlayersDB(unittest.TestCase):
     def setUp(self):
-        self.db = PlayersDB()
+        # connect to the database
+        self.connection = engine.connect()
+
+        # begin a non-ORM transaction
+        self.transaction = self.connection.begin()
+
+        # bind an individual Session to the connection
+        self.session = Session(bind=self.connection)
+
+        self.db = PlayersDB(self.session)
+
+    # def test_get_wins_nonexistent(self):
+    #     name = 'Fake'
+    #     with self.assertRaises(NonexistentPlayerError) as cm:
+    #         self.db.get_wins(wins)
+    #         self.assertEqual(str(cm.exception), 'No such player: Fake')
 
     def test_add_retrieve(self):
         name = 'Charlie'
@@ -77,3 +96,13 @@ class TestPlayersDB(unittest.TestCase):
         for name in ['Bruce', 'Bob', 'Sue']:
             self.db.add_player(name)
         self.assertEqual(len(self.db), 3)
+
+    def tearDown(self):
+        # rollback - everything that happened with the
+        # Session above (including calls to commit())
+        # is rolled back.
+        self.transaction.rollback()
+        self.session.close()
+
+        # return connection to the Engine
+        self.connection.close()
