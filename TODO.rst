@@ -6,4 +6,5 @@ To do:
 * Handle invalid winner.
 * Add players as we go.
 * Show all completions.
-* Tests for console_io.
+* Add tests for main.
+* Adapt behavior to handle persistence (it's a bit wonky right now).
