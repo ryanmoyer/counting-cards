@@ -22,11 +22,11 @@ class TestPlayersDB(unittest.TestCase):
 
         self.db = PlayersDB(self.session)
 
-    # def test_get_wins_nonexistent(self):
-    #     name = 'Fake'
-    #     with self.assertRaises(NonexistentPlayerError) as cm:
-    #         self.db.get_wins(wins)
-    #         self.assertEqual(str(cm.exception), 'No such player: Fake')
+    def test_get_wins_nonexistent(self):
+        name = 'Fake'
+        with self.assertRaises(NonexistentPlayerError) as cm:
+            self.db.get_wins(name)
+        self.assertEqual(str(cm.exception), 'No such player: Fake')
 
     def test_add_retrieve(self):
         name = 'Charlie'
