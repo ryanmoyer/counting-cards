@@ -1,10 +1,14 @@
 import unittest
 
+from sqlalchemy import create_engine
+
 from counting_cards.db import (PlayersDB,
                                DuplicatePlayerError,
                                NonexistentPlayerError,
-                               engine,
                                Session)
+
+
+engine = create_engine('sqlite:///:memory:')
 
 
 # See <http://docs.sqlalchemy.org/en/rel_0_8/orm/
@@ -20,7 +24,7 @@ class TestPlayersDB(unittest.TestCase):
         # bind an individual Session to the connection
         self.session = Session(bind=self.connection)
 
-        self.db = PlayersDB(self.session)
+        self.db = PlayersDB(engine, self.session)
 
     def test_get_wins_nonexistent(self):
         name = 'Fake'

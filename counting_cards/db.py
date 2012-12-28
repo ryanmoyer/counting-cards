@@ -4,7 +4,9 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import exists
 
-engine = create_engine('sqlite:///players.sqlite')
+# The SQLite database file will be created in the current directory.
+SQLITE_DB_FILE = 'players.sqlite'
+
 Session = sessionmaker()
 Base = declarative_base()
 
@@ -18,8 +20,6 @@ class Player(Base):
 
     def __repr__(self):
         return 'Player(name={0}, wins={1})'.format(self.name, self.wins)
-
-Base.metadata.create_all(engine)
 
 
 class DuplicatePlayerError(Exception):
@@ -39,11 +39,18 @@ class NonexistentPlayerError(Exception):
 
 
 class PlayersDB(object):
-    def __init__(self, session=Session(bind=engine)):
-        # If the user passes is a session, use that. Otherwise default
-        # to a session bound to the engine. This is mainly for unit
-        # testing.
-        self.session = session
+    def __init__(self,
+                 engine=create_engine('sqlite:///{0}'.format(SQLITE_DB_FILE)),
+                 session=None):
+        # If the user passes an engine and a session use them. This
+        # "feature" will only be used for unit testing. The defaults
+        # will be used for production.
+        self.engine = engine
+        if session is None:
+            self.session = Session(bind=engine)
+        else:
+            self.session = session
+        Base.metadata.create_all(engine)
 
     def __len__(self):
         return self.session.query(Player).count()
