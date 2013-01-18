@@ -1,16 +1,21 @@
 from __future__ import print_function
 
+from texttable import Texttable
+
 from counting_cards.utils import is_empty
-from counting_cards.header import header
 from counting_cards.console_io import ConsoleCompleter, read_line
 from counting_cards.db import PlayersDB
 
 
 def print_current_standings(players_db):
     print()
-    print(header('Current Standings'))
+    table = Texttable()
+    table.header(['Player', 'Wins'])
+    table.set_deco(Texttable.HEADER)
+    table.set_cols_align(['l', 'r'])
     for name, wins in players_db.iter_players_wins():
-        print('{0}: {1}'.format(name, wins))
+        table.add_row([name, wins])
+    print(table.draw())
     print()
 
 
