@@ -2,3 +2,4 @@ pyreadline
 flake8
 SQLAlchemy==0.8.0b2
 appdirs
+texttable
